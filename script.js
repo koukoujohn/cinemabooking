@@ -11,9 +11,21 @@ let ticketPrice = +movieSelect.value;
 
 //Functions
 
+// Save selected movie index amd price
+function setMovieData(movieIndex, moviePrice) {
+    // We dont need to use JSON.stringify because we want them to be saved as a string not as an array or something else.
+    localStorage.setItem('selectedMovieIndex', movieIndex);
+    localStorage.setItem('selectedMoviePrice', moviePrice);
+}
+
 // Update total and count
 function updateSelectedCount() {
     const selectedSeats = document.querySelectorAll('.row .seat.selected');
+// Finds the index of each selected seat and stores it in seatsIndex array
+    const seatsIndex = [...selectedSeats].map(seat => [...seats].indexOf(seat));
+// Save in local storage the selected seats.
+    localStorage.setItem('selectedSeats', JSON.stringify(seatsIndex));
+
 //based on the length of the Nodelist created by selectedSeats, update count and total
     const selectedSeatsCount = selectedSeats.length;
     count.innerText = selectedSeatsCount;
@@ -25,6 +37,7 @@ function updateSelectedCount() {
 // Whenever movie is changed the ticket price gets updated
 movieSelect.addEventListener('change', e => {
     ticketPrice = +e.target.value;
+    setMovieData(e.target.selectedIndex, e.target.value);
     updateSelectedCount();
 });
 
